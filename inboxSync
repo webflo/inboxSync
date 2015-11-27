@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+
+use Symfony\Component\Console\Application;
+
+require __DIR__ . '/vendor/autoload.php';
+
+$application = new Application();
+$application->add(new \InboxSync\Command\Configure());
+
+// GitHub
+$application->add(new \InboxSync\Plugin\GitHub\Sync());
+
+// Drupal.org
+$application->add(new \InboxSync\Plugin\Drupal\Sync());
+
+$application->run();

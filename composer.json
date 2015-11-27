@@ -10,7 +10,8 @@
         "google/apiclient": "2.0.*@beta",
         "knplabs/github-api": "^1.5",
         "symfony/yaml": "^2.7",
-        "alexpott/dopatchutils": "dev-patch-1"
+        "alexpott/dopatchutils": "dev-patch-1",
+        "symfony/process": "^2.7"
     },
     "autoload": {
         "psr-4": {

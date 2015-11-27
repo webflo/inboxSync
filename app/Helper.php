@@ -21,17 +21,20 @@ class Helper {
     return NULL;
   }
 
-  public static function createGoogleOauthClient(Config $config) {
+  public static function createGoogleOauthClient(Config $config, $initialize_access_token = TRUE) {
     $client = new Google_Client();
     $client->setApplicationName("GitHubSync");
     $client->setAuthConfigFile($config->getAuthConfigFile());
     $client->setScopes(['https://www.googleapis.com/auth/gmail.modify']);
-    $client->setAccessType("offline");
-    $client->setRedirectUri('http://inbox.dev/callback.php');
+    // $client->setRedirectUri('http://inbox.dev/callback.php');
+    $client->setRedirectUri('urn:ietf:wg:oauth:2.0:oob');
+    $client->setAccessType('offline');
 
-    $access_token = $config->getGoogleToken();
-    if (!empty($access_token)) {
-      $client->setAccessToken($access_token);
+    if ($initialize_access_token) {
+      $access_token = $config->getGoogleAccessToken();
+      if (!empty($access_token)) {
+        $client->setAccessToken($access_token);
+      }
     }
 
     return $client;

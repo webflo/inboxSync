@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "818899c91c97a0f6b53147bed9d38bc8",
-    "content-hash": "0b5f3e7e405404d47420450494c360a6",
+    "hash": "56b66af2b87826188b9f930225f13fc6",
+    "content-hash": "2603746312ed35610817b2fc07ba702b",
     "packages": [
         {
             "name": "alexpott/dopatchutils",

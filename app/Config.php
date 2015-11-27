@@ -13,29 +13,41 @@ class Config {
 
   protected $data;
 
+  protected $filepath;
+
   public function __construct() {
-    $this->data = Yaml::parse(__DIR__ . '/../config/config.yml');
+    $this->filepath = __DIR__ . '/../config/config.yml';
+    $this->data = Yaml::parse($this->filepath);
   }
 
   public function get($key) {
     return $this->data[$key];
   }
 
-  public function getGoogleToken() {
-    return json_decode(file_get_contents(__DIR__ . '/../config/code.json'), TRUE);
+  public function set($key, $value) {
+    $this->data[$key] = $value;
+    $this->save();
   }
 
-  public function storeGoogleToken($token) {
-    $data = json_decode(file_get_contents(__DIR__ . '/../config/code.json'), TRUE);
-    if (empty($data)) {
-      $data = [];
-    }
-    $data = array_merge($data, $token);
-    file_put_contents(__DIR__ . '/../config/code.json', json_encode($data));
+  public function remove($key) {
+    unset($this->data[$key]);
+    $this->save();
+  }
+
+  public function save() {
+    file_put_contents($this->filepath, Yaml::dump($this->data, 2, 2));
+  }
+
+  public function getGoogleAccessToken() {
+    return json_decode(file_get_contents(__DIR__ . '/../config/google_access_token.json'), TRUE);
+  }
+
+  public function setGoogleAccessToken($token) {
+    file_put_contents(__DIR__ . '/../config/google_access_token.json', json_encode($token));
   }
 
   public function getAuthConfigFile() {
-    return realpath(__DIR__ . '/../config/' . $this->get('google')['auth_config_file']);
+    return realpath(__DIR__ . '/../config/' . $this->get('google.auth_config_file'));
   }
 
 }
