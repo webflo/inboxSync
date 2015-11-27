@@ -26,7 +26,6 @@ class Helper {
     $client->setApplicationName("GitHubSync");
     $client->setAuthConfigFile($config->getAuthConfigFile());
     $client->setScopes(['https://www.googleapis.com/auth/gmail.modify']);
-    // $client->setRedirectUri('http://inbox.dev/callback.php');
     $client->setRedirectUri('urn:ietf:wg:oauth:2.0:oob');
     $client->setAccessType('offline');
 
