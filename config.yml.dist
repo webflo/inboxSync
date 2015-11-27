@@ -1,0 +1,6 @@
+google:
+  client: "client_secret_123.apps.googleusercontent.com.json"
+
+github:
+  # Github OAuth token: https://github.com/settings/tokens/new (Scope: notifications)
+  token: ""

@@ -2,37 +2,33 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$google_token = json_decode(file_get_contents('../code.json'), TRUE);
-$github_token = json_decode(file_get_contents('../github.json'), TRUE);
+$config = new \InboxSync\Config();
 
-$client = new Google_Client();
-$client->setApplicationName("GitHubSync");
-$client->setAuthConfigFile('../client_secret_863766085506-2rqrslekiif0qhek36vhgl31thqa4rh7.apps.googleusercontent.com.json');
-$client->setScopes(['https://www.googleapis.com/auth/gmail.modify']);
-$client->setAccessType("offline");
-$client->setAccessToken($google_token['access_token']);
+$gh_plugin = new InboxSync\Plugin\Github();
+$gh = $gh_plugin->getClient();
 
+$client = \InboxSync\Helper::createGoogleOauthClient($config);
 if ($client->isAccessTokenExpired()) {
-  $client->getRefreshToken();
+  $result = $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
+  $config->storeGoogleToken($result);
 }
 
 $gmail = new Google_Service_Gmail($client);
 $label_id = \InboxSync\Helper::findLabel($gmail, 'Notifications/Github');
 
-if (empty($label)) {
+if (empty($label_id)) {
   return;
 }
 
-$gh = new \Github\Client();
-$gh->authenticate($github_token['token'], \Github\Client::AUTH_HTTP_TOKEN);
-$github_notifications = [];
+
+$drupal_org_unread = [];
 $github_notifications_data = [];
 $github_notifications_read = [];
 $github_notifications_unread = [];
 
 foreach ($gh->currentUser()->notifications()->all() as $notifications) {
   $id = substr($notifications['subject']['url'], strlen('https://api.github.com/repos/'));
-  $github_notifications[$id] = TRUE;
+  $drupal_org_unread[$id] = TRUE;
   $github_notifications_data[$id] = $notifications;
 }
 
@@ -62,7 +58,7 @@ foreach ($gmail->users_threads->listUsersThreads('me', ['labelIds' => ['UNREAD',
 
   if (isset($id)) {
     // No unread GitHub notification, mark mail as read.
-    if (!isset($github_notifications[$id])) {
+    if (!isset($drupal_org_unread[$id])) {
       $body = new Google_Service_Gmail_ModifyThreadRequest();
       $body->setRemoveLabelIds(['UNREAD', 'INBOX']);
       $gmail->users_threads->modify('me', $thread->getId(), $body);
@@ -75,7 +71,7 @@ foreach ($gmail->users_threads->listUsersThreads('me', ['labelIds' => ['UNREAD',
   print '.' . PHP_EOL;
 }
 
-$diff = array_diff_key($github_notifications, $github_notifications_unread);
+$diff = array_diff_key($drupal_org_unread, $github_notifications_unread);
 foreach (array_keys($diff) as $id) {
   $data = $github_notifications_data[$id];
   $gh->currentUser()->notifications()->markAsRead($data['id'], []);

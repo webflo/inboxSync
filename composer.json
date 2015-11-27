@@ -8,11 +8,21 @@
     ],
     "require": {
         "google/apiclient": "2.0.*@beta",
-        "knplabs/github-api": "^1.5"
+        "knplabs/github-api": "^1.5",
+        "symfony/yaml": "^2.7",
+        "alexpott/dopatchutils": "dev-patch-1"
     },
     "autoload": {
         "psr-4": {
             "InboxSync\\": "app/"
         }
-    }
+    },
+    "repositories": [
+      {
+        "type": "vcs",
+        "url": "https://github.com/webflo/dopatchutils"
+      }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
