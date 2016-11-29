@@ -1,6 +1,4 @@
-google:
-  client: "client_secret_123.apps.googleusercontent.com.json"
+google.auth_config_file: "client_secret_123.apps.googleusercontent.com.json"
 
-github:
-  # Github OAuth token: https://github.com/settings/tokens/new (Scope: notifications)
-  token: ""
+# Github OAuth token: https://github.com/settings/tokens/new (Scope: notifications)
+github.token: "123"
