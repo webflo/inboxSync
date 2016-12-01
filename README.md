@@ -16,3 +16,22 @@ cp config.yml.dist config/config.yml
   - Anwendungstyp: Sonstiges
   - Name: InboxSync CLI
   - Download the OAuth config
+  - Update the `config/config.yml`
+
+Run:
+
+```
+$ ./inboxSync configure
+```
+
+Grant access to your account via the opened browser-window and copy
+the displayed code and paste it back into your terminal.
+
+
+Run:
+
+```
+$ ./inboxSync github:sync
+```
+
+Start reading your github notifications and see it getting synced.
