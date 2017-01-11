@@ -91,8 +91,10 @@ class Sync extends Command {
         }
       }
 
-      print '.' . PHP_EOL;
+      print '.';
     }
+
+    print PHP_EOL;
 
     $diff = array_diff_key($github_unread, $github_notifications_unread);
     foreach (array_keys($diff) as $id) {
